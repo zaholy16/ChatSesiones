@@ -1,0 +1,68 @@
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Chat</title>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script&gt;"></script>
+    
+    <style>
+        #chatbox {
+        text-align:left;
+        margin:0 auto;
+        margin-bottom:25px;
+        padding:10px;
+        background:#fff;
+        height:270px;
+        width:500px;
+        border:10px solid #31ac97;
+        overflow:auto; }
+    </style>
+    
+    </head>
+
+    <body>
+        <div id="wrapper">
+            <div id="menu">
+                <p class="bienvenido">Bienvenido, <b id="usernameTag"></b></p>
+                <p class="logout"><a id="exit" href="/">Salir del chat</a></p> 
+                
+            </div>
+
+            <div id="chatbox">
+                <!--Caja del chat que contendra todos los mensajes-->
+            </div>
+
+            <form name="message" action="">
+                <input name="usermsg" type="text" id="mensaje" size="63"/>
+                <input type="button" name="submitmsg" id="enviarMensaje" value="Enviar Mensaje"/>
+            </form>
+        </div>
+
+        <script src="http://yourwebsite.com:12345/socket.io/socket.io.js"></script>
+        <script>
+
+            var socket = io();
+
+            $(document).ready(function(){
+
+                $('usernameTag').append(request.session.username);
+
+                $('#enviarMensaje').click(function(){
+                    if($('#mensaje').val().length <= 0){
+                        alert("Escribe el mensaje para poderlo enviar");
+                    }else
+                    {
+                        var mensaje = $('#mensaje').val();
+                        socket.emit('mjsNuevo', mensaje);
+                    }
+                    
+                });
+
+                socket.on('mensaje', function(data){
+                    var nuevoMensaje = '<b>' + data.usuario + ' dice: </b>' + data.mensaje;
+                    $('#chatbox').append(nuevoMensaje + '<br>');
+                    $('#mensaje').val();
+                });
+            });
+        </script>
+    </body>
+</html>
